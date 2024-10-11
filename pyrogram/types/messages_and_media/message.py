@@ -316,7 +316,7 @@ class Message(Object, Update):
             The message is a scheduled giveaway message
 
         giveaway_winners (:obj:`~pyrogram.types.GiveawayWinners`, *optional*):
-            A giveaway with public winners was completed        
+            A giveaway with public winners was completed
 
         giveaway_completed (:obj:`~pyrogram.types.GiveawayCompleted`, *optional*):
             Service message: a giveaway without public winners was completed
@@ -952,7 +952,7 @@ class Message(Object, Update):
             elif isinstance(action, (raw.types.MessageActionPaymentSent, raw.types.MessageActionPaymentSentMe)):
                 successful_payment = types.SuccessfulPayment._parse(client, action)
                 service_type = enums.MessageServiceType.SUCCESSFUL_PAYMENT
-            
+
             elif isinstance(action, raw.types.MessageActionPaymentRefunded):
                 refunded_payment = types.RefundedPayment._parse(client, action)
                 service_type = enums.MessageServiceType.REFUNDED_PAYMENT
@@ -1388,22 +1388,6 @@ class Message(Object, Update):
             if isinstance(message.reply_to, raw.types.MessageReplyStoryHeader):
                 parsed_message.reply_to_story = await types.Story._parse(client, users, chats, None, message.reply_to, None, None, None)
 
-            if replies:
-                try:
-                    key = (parsed_message.chat.id, parsed_message.reply_to_message_id)
-                    reply_to_message = client.message_cache[key]
-
-                    if not reply_to_message:
-                        reply_to_message = await client.get_messages(
-                            chat_id=parsed_message.chat.id,
-                            reply_to_message_ids=message.id,
-                            replies=replies - 1
-                        )
-
-                    parsed_message.reply_to_message = reply_to_message
-                except MessageIdsEmpty:
-                    pass
-
         if business_connection_id:
             parsed_message.business_connection_id = business_connection_id
         if raw_reply_to_message:
@@ -1438,24 +1422,24 @@ class Message(Object, Update):
 
     async def get_media_group(self) -> List["types.Message"]:
         """Bound method *get_media_group* of :obj:`~pyrogram.types.Message`.
-        
+
         Use as a shortcut for:
-        
+
         .. code-block:: python
 
             await client.get_media_group(
                 chat_id=message.chat.id,
                 message_id=message.id
             )
-            
+
         Example:
             .. code-block:: python
 
                 await message.get_media_group()
-                
+
         Returns:
             List of :obj:`~pyrogram.types.Message`: On success, a list of messages of the media group is returned.
-            
+
         Raises:
             ValueError: In case the passed message id doesn't belong to a media group.
         """
@@ -2280,7 +2264,7 @@ class Message(Object, Update):
 
             caption_entities (List of :obj:`~pyrogram.types.MessageEntity`):
                 List of special entities that appear in the caption, which can be specified instead of *parse_mode*.
-            
+
             file_name (``str``, *optional*):
                 File name of the document sent.
                 Defaults to file's path basename.
@@ -4710,7 +4694,7 @@ class Message(Object, Update):
                 Defaults to ``True``.
 
             password (``str``, *optional*):
-                When clicking certain buttons (such as BotFather's confirmation button to transfer ownership), if your account has 2FA enabled, you need to provide your account's password. 
+                When clicking certain buttons (such as BotFather's confirmation button to transfer ownership), if your account has 2FA enabled, you need to provide your account's password.
                 The 2-step verification password for the current user. Only applicable, if the :obj:`~pyrogram.types.InlineKeyboardButton` contains ``callback_data_with_password``.
 
         Returns:
@@ -4896,7 +4880,7 @@ class Message(Object, Update):
             is_big (``bool``, *optional*):
                 Pass True to set the reaction with a big animation.
                 Defaults to False.
-            
+
             add_to_recent (``bool``, *optional*):
                 Pass True if the reaction should appear in the recently used reactions.
                 This option is applicable only for users.
@@ -5165,7 +5149,7 @@ class Message(Object, Update):
             "Please use forward_origin instead"
         )
         return getattr(self.forward_origin, "sender_user", None)
-    
+
     @property
     def forward_sender_name(self) -> str:
         log.warning(
@@ -5205,7 +5189,7 @@ class Message(Object, Update):
             "Please use forward_origin instead"
         )
         return getattr(self.forward_origin, "author_signature", None)
-        
+
     @property
     def forward_date(self) -> datetime:
         log.warning(
