@@ -37,11 +37,11 @@ class GetDialogs:
             limit (``int``, *optional*):
                 Limits the number of dialogs to be retrieved.
                 By default, no limit is applied and all dialogs are returned.
-            
+
             pinned_only (``bool``, *optional*):
                 Pass True if you want to get only pinned dialogs.
                 Defaults to False.
-            
+
             chat_list (``int``, *optional*):
                 Chat list from which to get the dialogs; Only Main (0) and Archive (1) chat lists are supported. Defaults to (0) Main chat list.
 
@@ -82,18 +82,21 @@ class GetDialogs:
 
             messages = {}
 
-            for message in r.messages:
-                if isinstance(message, raw.types.MessageEmpty):
-                    continue
+            try:
+                for message in r.messages:
+                    if isinstance(message, raw.types.MessageEmpty):
+                        continue
 
-                chat_id = utils.get_peer_id(message.peer_id)
-                messages[chat_id] = await types.Message._parse(
-                    self,
-                    message,
-                    users,
-                    chats,
-                    replies=self.fetch_replies
-                )
+                    chat_id = utils.get_peer_id(message.peer_id)
+                    messages[chat_id] = await types.Message._parse(
+                        self,
+                        message,
+                        users,
+                        chats,
+                        replies=self.fetch_replies
+                    )
+            except:
+                pass
 
             dialogs = []
 
@@ -109,7 +112,8 @@ class GetDialogs:
             last = dialogs[-1]
 
             offset_id = last.top_message.id
-            offset_date = utils.datetime_to_timestamp(last.top_message.date)
+            if messages:
+                offset_date = utils.datetime_to_timestamp(last.top_message.date)
             offset_peer = await self.resolve_peer(last.chat.id)
 
             for dialog in dialogs:
